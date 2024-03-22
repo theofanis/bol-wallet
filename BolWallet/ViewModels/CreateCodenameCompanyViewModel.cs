@@ -29,8 +29,6 @@ public partial class CreateCodenameCompanyViewModel : CreateCodenameViewModel
                 return;
             }
 
-            userData = await this._secureRepository.GetAsync<UserData>("userdata") ?? new UserData();
-
             var company = new Company
             {
                 Country = new Bol.Core.Model.Country

@@ -55,10 +55,8 @@ public partial class AccountViewModel : BaseViewModel
     [RelayCommand]
     private async Task DownloadEdiFilesAsync(CancellationToken cancellationToken = default)
     {
-        var userdata = await this._secureRepository.GetAsync<UserData>("userdata");
-
-        if (string.IsNullOrEmpty(userdata?.EncryptedDigitalMatrix) &&
-            string.IsNullOrEmpty(userdata?.EncryptedDigitalMatrixCompany))
+        if (string.IsNullOrEmpty(userData?.EncryptedDigitalMatrix) &&
+            string.IsNullOrEmpty(userData?.EncryptedDigitalMatrixCompany))
         {
             await Toast.Make("Encrypted Digital Matrix not found in the device.").Show(cancellationToken);
             return;
@@ -66,14 +64,14 @@ public partial class AccountViewModel : BaseViewModel
 
         List<FileItem> files;
 
-        if (userdata.IsIndividualRegistration)
-            files = _fileDownloadService.CollectIndividualFilesForDownload(userdata);
+        if (userData.IsIndividualRegistration)
+            files = _fileDownloadService.CollectIndividualFilesForDownload(userData);
         else
-            files = _fileDownloadService.CollectCompanyFilesForDownload(userdata);
+            files = _fileDownloadService.CollectCompanyFilesForDownload(userData);
 
         var ediZipFiles = await _fileDownloadService.CreateZipFileAsync(files);
 
-        await _fileDownloadService.SaveZipFileAsync(userdata.Codename, ediZipFiles, cancellationToken);
+        await _fileDownloadService.SaveZipFileAsync(userData.Codename, ediZipFiles, cancellationToken);
     }
 
     [RelayCommand]

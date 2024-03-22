@@ -29,8 +29,6 @@ public partial class CreateCodenameIndividualViewModel : CreateCodenameViewModel
                 return;
             }
 
-            userData = await this._secureRepository.GetAsync<UserData>("userdata");
-
             var person = new NaturalPerson
             {
                 FirstName = IndividualCodenameForm.FirstName.Value,

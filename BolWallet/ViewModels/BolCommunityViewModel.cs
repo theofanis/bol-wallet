@@ -29,7 +29,7 @@ public partial class BolCommunityViewModel : BaseViewModel
     {
         try
         {
-            userData = await _repo.GetAsync<UserData>("userdata");
+            userData = await _repo.GetAsync<UserData>(Constants.UserDataKey);
             IsCertifier = userData.IsCertifier;
         }
         catch (Exception ex)

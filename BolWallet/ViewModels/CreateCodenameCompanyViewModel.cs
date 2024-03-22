@@ -56,7 +56,7 @@ public partial class CreateCodenameCompanyViewModel : CreateCodenameViewModel
             userData.Company = company;
             userData.IsIndividualRegistration = false;
 
-            await _secureRepository.SetAsync("userdata", userData);
+            await _secureRepository.SetAsync(Constants.UserDataKey, userData);
 
             Codename = result;
         }
@@ -79,7 +79,7 @@ public partial class CreateCodenameCompanyViewModel : CreateCodenameViewModel
 
     public async Task Initialize()
     {
-        userData = await _secureRepository.GetAsync<UserData>("userdata");
+        userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
         if (userData?.Company is null) return;
 
         var country = new Models.Country

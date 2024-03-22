@@ -91,7 +91,7 @@ public partial class MainViewModel : BaseViewModel
 
             var userData = new UserData { Codename = bolWallet.Name, BolWallet = bolWallet, WalletPassword = password };
 
-            await _secureRepository.SetAsync("userdata", userData);
+            await _secureRepository.SetAsync(Constants.UserDataKey, userData);
 
             await NavigationService.NavigateTo<MainWithAccountViewModel>(true);
         }

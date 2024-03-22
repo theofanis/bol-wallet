@@ -10,4 +10,6 @@ internal class Constants
         PropertyNameCaseInsensitive = true,
         WriteIndented = true
     };
+
+    public static readonly string UserDataKey = "userdata";
 }

@@ -42,7 +42,7 @@ public partial class TransactionsViewModel : BaseViewModel
 
 	public async Task Initialize()
     {
-		userData = await _secureRepository.GetAsync<UserData>("userdata");
+		userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
 		BolAccount = await _bolService.GetAccount(userData.Codename);
 

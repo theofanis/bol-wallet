@@ -97,7 +97,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        userData = await secureRepository.GetAsync<UserData>("userdata");
+        userData = await secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
         CitizeshipsDocuments = new()
         {
@@ -239,7 +239,7 @@
                     associatedForm.IsSubmitted = true;
                 }
 
-                await secureRepository.SetAsync("userdata", userData);
+                await secureRepository.SetAsync(Constants.UserDataKey, userData);
 
                 await OnInitializedAsync();
             }

@@ -54,7 +54,7 @@ public partial class GenerateWalletWithPasswordViewModel : BaseViewModel
             
             string privateKey = _base16Encoder.Encode(hash);
 
-            UserData userData = await this._secureRepository.GetAsync<UserData>("userdata");
+            UserData userData = await this._secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
             Bol.Core.Model.BolWallet bolWallet;
 
@@ -66,7 +66,7 @@ public partial class GenerateWalletWithPasswordViewModel : BaseViewModel
             userData.BolWallet = bolWallet;
             userData.WalletPassword = Password;
 
-            await Task.Run(async () => await _secureRepository.SetAsync("userdata", userData));
+            await Task.Run(async () => await _secureRepository.SetAsync(Constants.UserDataKey, userData));
 
             await DownloadWalletAsync(bolWallet);
         }

@@ -39,7 +39,7 @@ public partial class AccountViewModel : BaseViewModel
     {
         try
         {
-            userData = await _secureRepository.GetAsync<UserData>("userdata");
+            userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
             BolAccount = await Task.Run(async () => await _bolService.GetAccount(userData.Codename));
 

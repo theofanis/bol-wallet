@@ -30,7 +30,7 @@ public partial class ClaimViewModel : BaseViewModel
 	{
 		try
 		{
-			userData = await _secureRepository.GetAsync<UserData>("userdata");
+			userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
 			if (userData is null) return;
 

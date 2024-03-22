@@ -136,7 +136,7 @@ public partial class CreateEdiViewModel : BaseViewModel
         {
             IsLoading = true;
 
-            userData = await this._secureRepository.GetAsync<UserData>("userdata");
+            userData = await this._secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
             extendedEncryptedDigitalMatrix.CodeName = userData.Codename;
 
@@ -179,7 +179,7 @@ public partial class CreateEdiViewModel : BaseViewModel
             userData.ExtendedEncryptedDigitalMatrix = _encryptedDigitalIdentityService.SerializeMatrix(extendedEncryptedDigitalMatrix);
             userData.EncryptedDigitalMatrix = _encryptedDigitalIdentityService.SerializeMatrix(edm);
 
-            await _secureRepository.SetAsync("userdata", userData);
+            await _secureRepository.SetAsync(Constants.UserDataKey, userData);
 
             await NavigationService.NavigateTo<GenerateWalletWithPasswordViewModel>(true);
         }
@@ -214,7 +214,7 @@ public partial class CreateEdiViewModel : BaseViewModel
 
         userData.GenericHashTableFiles = ediFiles;
 
-        await _secureRepository.SetAsync("userdata", userData);
+        await _secureRepository.SetAsync(Constants.UserDataKey, userData);
     }
 
     private void SetFileHash(PropertyInfo propertyNameInfo, string fileName, byte[] fileBytes)
@@ -229,7 +229,7 @@ public partial class CreateEdiViewModel : BaseViewModel
 
     public async Task Initialize()
     {
-        userData = await this._secureRepository.GetAsync<UserData>("userdata");
+        userData = await this._secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
         if (userData?.GenericHashTableFiles is null) return;
 

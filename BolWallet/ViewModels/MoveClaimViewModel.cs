@@ -56,7 +56,7 @@ public partial class MoveClaimViewModel : BaseViewModel
 	{
 		try
 		{
-			userData = await _secureRepository.GetAsync<UserData>("userdata");
+			userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
 			if (userData is null) return;
 

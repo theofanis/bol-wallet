@@ -125,7 +125,7 @@ public partial class MainWithAccountViewModel : BaseViewModel
     {
         try
         {
-            userData = await _secureRepository.GetAsync<UserData>("userdata");
+            userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
             CodeName = userData.Codename;
             MainAddress = userData?.BolWallet?.accounts?.FirstOrDefault(a => a.Label == "main")?.Address
@@ -145,7 +145,7 @@ public partial class MainWithAccountViewModel : BaseViewModel
             if (IsRegistered)
             {
                 userData.IsCertifier = BolAccount.IsCertifier;
-                await _secureRepository.SetAsync("userdata", userData);
+                await _secureRepository.SetAsync(Constants.UserDataKey, userData);
 
                 if (BolAccount.AccountStatus == AccountStatus.Open)
                     IsAccountOpen = true;

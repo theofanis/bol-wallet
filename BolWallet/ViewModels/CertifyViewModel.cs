@@ -54,7 +54,7 @@ public partial class CertifyViewModel : BaseViewModel
     {
         try
         {
-            userData = await _secureRepository.GetAsync<UserData>("userdata");
+            userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
             IsLoading = true;
             await UpdateBolAccount(token);

@@ -9,7 +9,6 @@ namespace BolWallet.ViewModels;
 public partial class CreateCodenameViewModel : BaseViewModel
 {
     protected readonly ICodeNameService _codeNameService;
-    protected readonly ISecureRepository _secureRepository;
     private readonly IOptions<BolConfig> _bolConfig;
 
     public CreateCodenameViewModel(
@@ -18,10 +17,9 @@ public partial class CreateCodenameViewModel : BaseViewModel
         RegisterContent content,
         ISecureRepository secureRepository,
         IOptions<BolConfig> bolConfig)
-        : base(navigationService)
+        : base(navigationService, secureRepository)
     {
         _codeNameService = codeNameService;
-        _secureRepository = secureRepository;
         _bolConfig = bolConfig;
     }
 

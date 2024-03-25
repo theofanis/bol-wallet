@@ -9,7 +9,6 @@ namespace BolWallet.ViewModels;
 public partial class GenerateWalletWithPasswordViewModel : BaseViewModel
 {
     private readonly IWalletService _walletService;
-    private readonly ISecureRepository _secureRepository;
     private readonly ISha256Hasher _sha256Hasher;
     private readonly IBase16Encoder _base16Encoder;
     private readonly IFileSaver _fileSaver;
@@ -23,10 +22,9 @@ public partial class GenerateWalletWithPasswordViewModel : BaseViewModel
         IBase16Encoder base16Encoder,
         IFileSaver fileSaver,
         IDeviceDisplay deviceDisplay)
-        : base(navigationService)
+        : base(navigationService, secureRepository)
     {
         _walletService = walletService;
-        _secureRepository = secureRepository;
         _sha256Hasher = sha256Hasher;
         _base16Encoder = base16Encoder;
         _fileSaver = fileSaver;
@@ -53,8 +51,6 @@ public partial class GenerateWalletWithPasswordViewModel : BaseViewModel
             byte[] hash = _sha256Hasher.Hash(Encoding.UTF8.GetBytes(Password));
             
             string privateKey = _base16Encoder.Encode(hash);
-
-            UserData userData = await this._secureRepository.GetAsync<UserData>(Constants.UserDataKey);
 
             Bol.Core.Model.BolWallet bolWallet;
 

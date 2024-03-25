@@ -65,9 +65,8 @@ public partial class CreateCodenameIndividualViewModel : CreateCodenameViewModel
         }
     }
 
-    public async Task Initialize()
+    public void Initialize()
     {
-        userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
         if (userData?.Person is null) return;
 
         IndividualCodenameForm.Gender = userData.Person.Gender;

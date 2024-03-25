@@ -11,7 +11,6 @@ public partial class MoveClaimViewModel : BaseViewModel
 	public string AmountText => "Amount";
 
 	private readonly IAddressTransformer _addressTransformer;
-	private readonly ISecureRepository _secureRepository;
 	private readonly IBolService _bolService;
 
     private const string COMMERCIAL_ADDRESS = "Commercial Address";
@@ -43,12 +42,11 @@ public partial class MoveClaimViewModel : BaseViewModel
 	public MoveClaimViewModel(INavigationService navigationService,
 		IAddressTransformer addressTransformer,
 		ISecureRepository secureRepository,
-		IBolService bolService) : base(navigationService)
+		IBolService bolService) : base(navigationService, secureRepository)
 	{
 		MoveClaimForm = new MoveClaimForm();
 
 		_addressTransformer = addressTransformer;
-		_secureRepository = secureRepository;
 		_bolService = bolService;
 	}
 
@@ -56,8 +54,6 @@ public partial class MoveClaimViewModel : BaseViewModel
 	{
 		try
 		{
-			userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
-
 			if (userData is null) return;
 
 			BolAccount = await Task.Run(async () => await _bolService.GetAccount(userData.Codename));

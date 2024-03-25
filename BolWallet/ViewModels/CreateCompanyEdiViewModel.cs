@@ -12,7 +12,6 @@ public partial class CreateCompanyEdiViewModel : BaseViewModel
 {
     private readonly IPermissionService _permissionService;
     private readonly IBase16Encoder _base16Encoder;
-    private readonly ISecureRepository _secureRepository;
     private readonly ISha256Hasher _sha256Hasher;
     private readonly IEncryptedDigitalIdentityService _encryptedDigitalIdentityService;
     private readonly IMediaPicker _mediaPicker;
@@ -29,11 +28,10 @@ public partial class CreateCompanyEdiViewModel : BaseViewModel
         ISha256Hasher sha256Hasher,
         IEncryptedDigitalIdentityService encryptedDigitalIdentityService,
         IMediaPicker mediaPicker)
-        : base(navigationService)
+        : base(navigationService, secureRepository)
     {
         _permissionService = permissionService;
         _base16Encoder = base16Encoder;
-        _secureRepository = secureRepository;
         _sha256Hasher = sha256Hasher;
         _encryptedDigitalIdentityService = encryptedDigitalIdentityService;
         _mediaPicker = mediaPicker;
@@ -165,10 +163,8 @@ public partial class CreateCompanyEdiViewModel : BaseViewModel
             .SetValue(extendedEncryptedDigitalMatrix.Hashes, _base16Encoder.Encode(_sha256Hasher.Hash(fileBytes)));
     }
 
-    public async Task Initialize()
+    public void Initialize()
     {
-        userData = await this._secureRepository.GetAsync<UserData>(Constants.UserDataKey);
-
         if (userData?.CompanyHashFiles is null) return;
 
         ediFiles = userData.CompanyHashFiles;

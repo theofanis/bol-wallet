@@ -20,7 +20,8 @@ public partial class CompleteBolLoginChallengeViewModel : BaseViewModel
         IContextAccessor contextAccessor,
         IECCurveSigner signer,
         IBase64Encoder base64Encoder,
-        IBolChallengeService bolChallengeService) : base(navigationService)
+        IBolChallengeService bolChallengeService,
+        ISecureRepository secureRepository) : base(navigationService, secureRepository)
     {
         _contextAccessor = contextAccessor;
         _signer = signer;

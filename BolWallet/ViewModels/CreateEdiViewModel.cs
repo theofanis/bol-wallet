@@ -12,7 +12,6 @@ public partial class CreateEdiViewModel : BaseViewModel
     private readonly IPermissionService _permissionService;
     private readonly IBase16Encoder _base16Encoder;
     private readonly ISha256Hasher _sha256Hasher;
-    private readonly ISecureRepository _secureRepository;
     private readonly IEncryptedDigitalIdentityService _encryptedDigitalIdentityService;
     private readonly IMediaPicker _mediaPicker;
     private ExtendedEncryptedDigitalMatrix extendedEncryptedDigitalMatrix;
@@ -28,12 +27,11 @@ public partial class CreateEdiViewModel : BaseViewModel
         ISecureRepository secureRepository,
         IEncryptedDigitalIdentityService encryptedDigitalIdentityService,
         IMediaPicker mediaPicker)
-        : base(navigationService)
+        : base(navigationService, secureRepository)
     {
         _permissionService = permissionService;
         _base16Encoder = base16Encoder;
         _sha256Hasher = sha256Hasher;
-        _secureRepository = secureRepository;
         _encryptedDigitalIdentityService = encryptedDigitalIdentityService;
         _mediaPicker = mediaPicker;
         extendedEncryptedDigitalMatrix = new ExtendedEncryptedDigitalMatrix { Hashes = new GenericHashTable() };
@@ -227,10 +225,8 @@ public partial class CreateEdiViewModel : BaseViewModel
             .SetValue(extendedEncryptedDigitalMatrix.Hashes, _base16Encoder.Encode(_sha256Hasher.Hash(fileBytes)));
     }
 
-    public async Task Initialize()
+    public void Initialize()
     {
-        userData = await this._secureRepository.GetAsync<UserData>(Constants.UserDataKey);
-
         if (userData?.GenericHashTableFiles is null) return;
 
         ediFiles = userData.GenericHashTableFiles;

@@ -106,7 +106,7 @@
     bool updating = true;
     string[] errors = { };
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         updating = true;
 
@@ -114,7 +114,7 @@
 
         CompanyCodenameForm = createCodenameCompanyViewModel.CompanyCodenameForm;
 
-        await createCodenameCompanyViewModel.Initialize();
+        createCodenameCompanyViewModel.Initialize();
 
         IncorporationDate = CompanyCodenameForm.IncorporationDate.Value == null ? DateTime.Today : Convert.ToDateTime(CompanyCodenameForm.IncorporationDate.Value);
     }

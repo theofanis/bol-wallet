@@ -8,7 +8,6 @@ namespace BolWallet.ViewModels;
 public partial class MainViewModel : BaseViewModel
 {
     private readonly IPermissionService _permissionService;
-    private readonly ISecureRepository _secureRepository;
     private readonly IExportKeyFactory _exportKeyFactory;
     private readonly ISha256Hasher _sha256;
 
@@ -18,10 +17,9 @@ public partial class MainViewModel : BaseViewModel
         ISecureRepository secureRepository,
         IExportKeyFactory exportKeyFactory,
         ISha256Hasher sha256)
-        : base(navigationService)
+        : base(navigationService, secureRepository)
     {
         _permissionService = permissionService;
-        _secureRepository = secureRepository;
         _exportKeyFactory = exportKeyFactory;
         _sha256 = sha256;
     }

@@ -5,7 +5,6 @@ using CommunityToolkit.Maui.Alerts;
 namespace BolWallet.ViewModels;
 public partial class CertifyViewModel : BaseViewModel
 {
-    private readonly ISecureRepository _secureRepository;
     private readonly IBolService _bolService;
     private readonly IFileDownloadService _fileDownloadService;
 
@@ -13,9 +12,8 @@ public partial class CertifyViewModel : BaseViewModel
         INavigationService navigationService,
         ISecureRepository secureRepository,
         IBolService bolService,
-        IFileDownloadService fileDownloadService) : base(navigationService)
+        IFileDownloadService fileDownloadService) : base(navigationService, secureRepository)
     {
-        _secureRepository = secureRepository;
         _bolService = bolService;
         _fileDownloadService = fileDownloadService;
     }
@@ -54,8 +52,6 @@ public partial class CertifyViewModel : BaseViewModel
     {
         try
         {
-            userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
-
             IsLoading = true;
             await UpdateBolAccount(token);
         }

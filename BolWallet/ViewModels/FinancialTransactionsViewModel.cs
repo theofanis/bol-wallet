@@ -7,16 +7,14 @@ namespace BolWallet.ViewModels
     public partial class FinancialTransactionsViewModel : BaseViewModel
     {
         private readonly IBolService _bolService;
-        private readonly ISecureRepository _secureRepository;
 
         public FinancialTransactionsViewModel(
             INavigationService navigationService,
             IBolService bolService,
             ISecureRepository secureRepository)
-            : base(navigationService)
+            : base(navigationService, secureRepository)
         {
             _bolService = bolService;
-            _secureRepository = secureRepository;
         }
 
         [ObservableProperty]
@@ -27,8 +25,6 @@ namespace BolWallet.ViewModels
         {
             try
             {
-                userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
-
                 if (userData is null) return;
 
                 BolAccount bolAccount = await Task.Run(async () => await _bolService.GetAccount(userData.Codename));

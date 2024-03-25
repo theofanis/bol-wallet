@@ -4,7 +4,7 @@ public partial class UserViewModel : BaseViewModel
 {
     private UserData _userData;
 
-    public UserViewModel(INavigationService navigationService) : base(navigationService)
+    public UserViewModel(INavigationService navigationService, ISecureRepository secureRepository) : base(navigationService, secureRepository)
     {
         //Mock User Creation
         _userData = new UserData

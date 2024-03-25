@@ -77,9 +77,8 @@ public partial class CreateCodenameCompanyViewModel : CreateCodenameViewModel
         };
     }
 
-    public async Task Initialize()
+    public void Initialize()
     {
-        userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
         if (userData?.Company is null) return;
 
         var country = new Models.Country

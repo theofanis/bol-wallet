@@ -60,7 +60,7 @@
     {
         createEdiViewModel = ViewModel;
 
-        await createEdiViewModel.Initialize();
+        createEdiViewModel.Initialize();
 
         foreach (PropertyInfo propertyInfo in createEdiViewModel.ediFiles.GetType().GetProperties())
         {

@@ -46,17 +46,15 @@ public partial class SendBolViewModel : BaseViewModel
     private const string FromCommercialAddress = "From Commercial Address";
 
 	private readonly IAddressTransformer _addressTransformer;
-	private readonly ISecureRepository _secureRepository;
 	private readonly IBolService _bolService;
 
 	public SendBolViewModel(
 		INavigationService navigationService,
 		IAddressTransformer addressTransformer,
 		ISecureRepository secureRepository,
-		IBolService bolService) : base(navigationService)
+		IBolService bolService) : base(navigationService, secureRepository)
 	{
 		_addressTransformer = addressTransformer;
-		_secureRepository = secureRepository;
 		_bolService = bolService;
 
 		SendBolForm = new SendBolForm();
@@ -66,8 +64,6 @@ public partial class SendBolViewModel : BaseViewModel
 	{
 		try
 		{
-			userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
-
 			if (userData is null) return;
 
 			BolAccount = await Task.Run(async () => await _bolService.GetAccount(userData.Codename));

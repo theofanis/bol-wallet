@@ -8,7 +8,6 @@ using Microsoft.Extensions.Options;
 namespace BolWallet.ViewModels;
 public partial class MainWithAccountViewModel : BaseViewModel
 {
-    private readonly ISecureRepository _secureRepository;
     private readonly IBolService _bolService;
     private readonly IDeviceDisplay _deviceDisplay;
     private readonly IAddressTransformer _addressTransformer;
@@ -62,14 +61,13 @@ public partial class MainWithAccountViewModel : BaseViewModel
         INavigationService navigationService,
         ISecureRepository secureRepository,
         IBolService bolService,
-        IDeviceDisplay deviceDisplay, 
+        IDeviceDisplay deviceDisplay,
         IAddressTransformer addressTransformer,
         IBolContractHashService bolContractHashClient,
         IOptions<BolWalletAppConfig> bolConfig,
         IOptions<BolConfig> bolSdkConfig)
-        : base(navigationService)
+        : base(navigationService, secureRepository)
     {
-        _secureRepository = secureRepository;
         _bolService = bolService;
         _deviceDisplay = deviceDisplay;
         _addressTransformer = addressTransformer;
@@ -125,8 +123,6 @@ public partial class MainWithAccountViewModel : BaseViewModel
     {
         try
         {
-            userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
-
             CodeName = userData.Codename;
             MainAddress = userData?.BolWallet?.accounts?.FirstOrDefault(a => a.Label == "main")?.Address
                 ?? throw new Exception("Could not find a Main Address account in open wallet.");

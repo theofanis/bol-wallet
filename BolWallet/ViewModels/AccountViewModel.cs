@@ -11,7 +11,6 @@ namespace BolWallet.ViewModels;
 
 public partial class AccountViewModel : BaseViewModel
 {
-    private readonly ISecureRepository _secureRepository;
     private readonly IBolService _bolService;
     private readonly IFileDownloadService _fileDownloadService;
 
@@ -19,9 +18,8 @@ public partial class AccountViewModel : BaseViewModel
         INavigationService navigationService,
         ISecureRepository secureRepository,
         IBolService bolService,
-        IFileDownloadService fileDownloadService) : base(navigationService)
+        IFileDownloadService fileDownloadService) : base(navigationService, secureRepository)
     {
-        _secureRepository = secureRepository;
         _bolService = bolService;
         _fileDownloadService = fileDownloadService;
     }
@@ -39,8 +37,6 @@ public partial class AccountViewModel : BaseViewModel
     {
         try
         {
-            userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
-
             BolAccount = await Task.Run(async () => await _bolService.GetAccount(userData.Codename));
 
             Certifiers = BolAccount.Certifiers.ToList();

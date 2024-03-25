@@ -59,7 +59,7 @@
     {
         createCompanyEdiViewModel = ViewModel;
 
-        await createCompanyEdiViewModel.Initialize();
+        createCompanyEdiViewModel.Initialize();
 
         foreach (PropertyInfo propertyInfo in createCompanyEdiViewModel.ediFiles.GetType().GetProperties())
         {

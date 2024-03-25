@@ -9,14 +9,15 @@ public partial class CertifierViewModel : BaseViewModel
 	private readonly IBolService _bolService;
 	private readonly IAddressTransformer _addressTransformer;
 
-	public CertifierViewModel(
+    public CertifierViewModel(
 		INavigationService navigationService,
 		IBolService bolService,
-		IAddressTransformer addressTransformer) : base(navigationService)
+		IAddressTransformer addressTransformer,
+        ISecureRepository secureRepository) : base(navigationService, secureRepository)
 	{
 		_bolService = bolService;
 		_addressTransformer = addressTransformer;
-	}
+    }
 
 	[ObservableProperty]
 	private string _codeNameToCertify = "";

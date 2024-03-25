@@ -15,7 +15,6 @@ public partial class TransactionsViewModel : BaseViewModel
 	private BolAccount _bolAccount = new();
 
 	private readonly IBolService _bolService;
-	private readonly ISecureRepository _secureRepository;
 
 	public string TransactionsLabel => "Transactions";
 
@@ -25,10 +24,9 @@ public partial class TransactionsViewModel : BaseViewModel
 	public TransactionsViewModel(
 		INavigationService navigationService,
 		IBolService bolService,
-		ISecureRepository secureRepository) : base(navigationService)
+		ISecureRepository secureRepository) : base(navigationService, secureRepository)
 	{
 		_bolService = bolService;
-		_secureRepository = secureRepository;
 	}
 
 	[RelayCommand]
@@ -42,8 +40,6 @@ public partial class TransactionsViewModel : BaseViewModel
 
 	public async Task Initialize()
     {
-		userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
-
 		BolAccount = await _bolService.GetAccount(userData.Codename);
 
 		foreach (BolTransactionEntry transaction in BolAccount.Transactions.OrderByDescending(x=>int.Parse(x.Key)).Select(x=>x.Value))

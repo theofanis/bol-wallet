@@ -6,7 +6,9 @@ public partial class RetrieveBolViewModel : BaseViewModel
     public string CommAddressText => "My Commercial Address";
     public string AmountText => "Amount";
 
-    public RetrieveBolViewModel(INavigationService navigationService) : base(navigationService)
+    public RetrieveBolViewModel(
+        INavigationService navigationService,
+        ISecureRepository secureRepository) : base(navigationService, secureRepository)
     {
 
     }

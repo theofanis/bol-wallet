@@ -1,5 +1,4 @@
 ﻿using Bol.Core.Abstractions;
-using BolWallet.Pages;
 using CommunityToolkit.Maui.Alerts;
 
 namespace BolWallet.ViewModels;
@@ -16,12 +15,10 @@ public partial class BolCommunityViewModel : BaseViewModel
     [ObservableProperty] private bool _isCertifier;
     
     private readonly IBolService _bolService;
-    private readonly ISecureRepository _repo;
 
-    public BolCommunityViewModel(INavigationService navigationService, IBolService bolService, ISecureRepository repo) : base(navigationService)
+    public BolCommunityViewModel(INavigationService navigationService, IBolService bolService, ISecureRepository secureRepository) : base(navigationService, secureRepository)
     {
         _bolService = bolService;
-        _repo = repo;
     }
     
     [RelayCommand]
@@ -29,7 +26,6 @@ public partial class BolCommunityViewModel : BaseViewModel
     {
         try
         {
-            userData = await _repo.GetAsync<UserData>(Constants.UserDataKey);
             IsCertifier = userData.IsCertifier;
         }
         catch (Exception ex)

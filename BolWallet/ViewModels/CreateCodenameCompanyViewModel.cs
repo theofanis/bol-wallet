@@ -56,7 +56,14 @@ public partial class CreateCodenameCompanyViewModel : CreateCodenameViewModel
             userData.Company = company;
             userData.IsIndividualRegistration = false;
 
-            await _secureRepository.SetAsync(Constants.UserDataKey, userData);
+            List<AppCodename> codenames = _secureRepository.Get<List<AppCodename>>(Constants.AppCodenamesKey) ?? new List<AppCodename>();
+            if (!codenames.Any(c => c.Codename == result))
+            {
+                codenames.Add(new AppCodename(result, isActive: true));
+                await _secureRepository.SetAsync(Constants.AppCodenamesKey, codenames);
+            }
+
+            await _secureRepository.SetAsync(result, userData);
 
             Codename = result;
         }
@@ -77,8 +84,9 @@ public partial class CreateCodenameCompanyViewModel : CreateCodenameViewModel
         };
     }
 
-    public void Initialize()
+    public async Task Initialize()
     {
+        userData = await _secureRepository.GetAsync<UserData>(Constants.UserDataKey);
         if (userData?.Company is null) return;
 
         var country = new Models.Country

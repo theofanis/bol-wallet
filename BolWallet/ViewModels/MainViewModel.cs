@@ -24,9 +24,9 @@ public partial class MainViewModel : BaseViewModel
         _sha256 = sha256;
     }
 
-	[RelayCommand]
-	private async Task NavigateToCodenameCompanyPage()
-	{
+    [RelayCommand]
+    private async Task NavigateToCodenameCompanyPage()
+    {
         await NavigationService.NavigateTo<CreateCodenameCompanyViewModel>(true);
     }
 
@@ -51,7 +51,8 @@ public partial class MainViewModel : BaseViewModel
 
             var pickResult = await FilePicker.PickAsync(new PickOptions
             {
-                FileTypes = customFileType, PickerTitle = "Import Your Json Wallet"
+                FileTypes = customFileType,
+                PickerTitle = "Import Your Json Wallet"
             });
 
             if (pickResult == null)
@@ -79,7 +80,7 @@ public partial class MainViewModel : BaseViewModel
                 bolWallet.Scrypt.N,
                 bolWallet.Scrypt.R,
                 bolWallet.Scrypt.P));
-            
+
             var expectedCodeNameKey = _sha256.Hash(Encoding.ASCII.GetBytes(bolWallet.Name));
 
             if (!codeNameKey.SequenceEqual(expectedCodeNameKey))
@@ -89,7 +90,14 @@ public partial class MainViewModel : BaseViewModel
 
             var userData = new UserData { Codename = bolWallet.Name, BolWallet = bolWallet, WalletPassword = password };
 
-            await _secureRepository.SetAsync(Constants.UserDataKey, userData);
+            List<AppCodename> codenames = _secureRepository.Get<List<AppCodename>>(Constants.AppCodenamesKey) ?? new List<AppCodename>();
+            if (!codenames.Any(c => c.Codename == userData.Codename))
+            {
+                codenames.Add(new AppCodename(userData.Codename, isActive: true));
+                await _secureRepository.SetAsync(Constants.AppCodenamesKey, codenames);
+            }
+
+            await _secureRepository.SetAsync(userData.Codename, userData);
 
             await NavigationService.NavigateTo<MainWithAccountViewModel>(true);
         }

@@ -16,6 +16,8 @@ public class BaseViewModel : ViewModelBase
         NavigationService = navigationService;
         _secureRepository = secureRepository;
 
-        userData = _secureRepository.Get<UserData>(Constants.UserDataKey);
+        List<AppCodename> codenames = secureRepository.Get<List<AppCodename>>(Constants.AppCodenamesKey);
+        var activeCodename = codenames?.FirstOrDefault(c => c.IsActive)?.Codename;
+        userData = !string.IsNullOrEmpty(activeCodename) ? secureRepository.Get<UserData>(activeCodename) : new UserData();
     }
 }

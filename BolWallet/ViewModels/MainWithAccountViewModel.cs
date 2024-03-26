@@ -141,7 +141,7 @@ public partial class MainWithAccountViewModel : BaseViewModel
             if (IsRegistered)
             {
                 userData.IsCertifier = BolAccount.IsCertifier;
-                await _secureRepository.SetAsync(Constants.UserDataKey, userData);
+                await _secureRepository.SetAsync(userData.Codename, userData);
 
                 if (BolAccount.AccountStatus == AccountStatus.Open)
                     IsAccountOpen = true;

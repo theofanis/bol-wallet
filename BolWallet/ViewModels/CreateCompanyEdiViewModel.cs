@@ -98,7 +98,7 @@ public partial class CreateCompanyEdiViewModel : BaseViewModel
         {
             IsLoading = true;
 
-            userData = await this._secureRepository.GetAsync<UserData>(Constants.UserDataKey);
+            userData = await this._secureRepository.GetAsync<UserData>(userData.Codename);
 
             extendedEncryptedDigitalMatrix.CodeName = userData.Codename;
             extendedEncryptedDigitalMatrix.Incorporation.Title = userData.Company.Title;
@@ -115,7 +115,7 @@ public partial class CreateCompanyEdiViewModel : BaseViewModel
             userData.ExtendedEncryptedDigitalMatrixCompany = _encryptedDigitalIdentityService.SerializeMatrix(extendedEncryptedDigitalMatrix);
             userData.EncryptedDigitalMatrixCompany = _encryptedDigitalIdentityService.SerializeMatrix(edm);
 
-            await _secureRepository.SetAsync(Constants.UserDataKey, userData);
+            await _secureRepository.SetAsync(userData.Codename, userData);
 
             await NavigationService.NavigateTo<GenerateWalletWithPasswordViewModel>(true);
         }
@@ -150,7 +150,7 @@ public partial class CreateCompanyEdiViewModel : BaseViewModel
 
         userData.CompanyHashFiles = ediFiles;
 
-        await _secureRepository.SetAsync(Constants.UserDataKey, userData);
+        await _secureRepository.SetAsync(userData.Codename, userData);
     }
 
     private void SetFileHash(PropertyInfo propertyNameInfo, string fileName, byte[] fileBytes)

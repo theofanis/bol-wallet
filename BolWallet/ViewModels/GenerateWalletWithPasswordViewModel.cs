@@ -47,9 +47,9 @@ public partial class GenerateWalletWithPasswordViewModel : BaseViewModel
         {
             _deviceDisplay.KeepScreenOn = true;
             IsLoading = true;
-            
+
             byte[] hash = _sha256Hasher.Hash(Encoding.UTF8.GetBytes(Password));
-            
+
             string privateKey = _base16Encoder.Encode(hash);
 
             Bol.Core.Model.BolWallet bolWallet;
@@ -62,7 +62,7 @@ public partial class GenerateWalletWithPasswordViewModel : BaseViewModel
             userData.BolWallet = bolWallet;
             userData.WalletPassword = Password;
 
-            await Task.Run(async () => await _secureRepository.SetAsync(Constants.UserDataKey, userData));
+            await Task.Run(async () => await _secureRepository.SetAsync(bolWallet.Name, userData));
 
             await DownloadWalletAsync(bolWallet);
         }

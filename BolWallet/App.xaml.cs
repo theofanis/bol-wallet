@@ -3,88 +3,90 @@ namespace BolWallet;
 
 public partial class App : Application
 {
-	private readonly ICountriesService _countriesService;
-	private readonly ISecureRepository _secureRepository;
+    private readonly ICountriesService _countriesService;
+    private readonly ISecureRepository _secureRepository;
 
-	public App(MainPage mainPage, IServiceProvider serviceProvider, ISecureRepository secureRepository, ICountriesService countriesService)
-	{
-		_countriesService = countriesService;
-		_secureRepository = secureRepository;
+    public App(MainPage mainPage, IServiceProvider serviceProvider, ISecureRepository secureRepository, ICountriesService countriesService)
+    {
+        _countriesService = countriesService;
+        _secureRepository = secureRepository;
 
-		InitializeComponent();
+        InitializeComponent();
 
-		UserAppTheme = AppTheme.Light;
+        UserAppTheme = AppTheme.Light;
 
 #if WINDOWS
         Microsoft.Maui.Handlers.PickerHandler.Mapper.Add(nameof(View.HorizontalOptions), MapHorizontalOptions);
 #endif
-		Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(ExtendedTextEdit),
-			(handler, view) =>
-			{
+        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(ExtendedTextEdit),
+            (handler, view) =>
+            {
 #if __ANDROID__
 				handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 #elif __IOS__
 				handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
 				handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
 #endif
-			});
+            });
 
-		Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(ExtendedComboBox),
-			(handler, view) =>
-			{
+        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(ExtendedComboBox),
+            (handler, view) =>
+            {
 #if __ANDROID__
                 handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 #elif __IOS__
 				handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
 				handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
 #endif
-			});
+            });
 
-		UserData userData = secureRepository.Get<UserData>("userdata");
+        List<AppCodename> codenames = secureRepository.Get<List<AppCodename>>(Constants.AppCodenamesKey);
+        var activeCodename = codenames?.FirstOrDefault(c => c.IsActive)?.Codename;
+        var userData = !string.IsNullOrEmpty(activeCodename) ? secureRepository.Get<UserData>(activeCodename) : new UserData();
 
-		if (userData?.BolWallet == null)
-		{
-			MainPage = new NavigationPage(mainPage);
-			return;
-		}
+        if (userData?.BolWallet == null)
+        {
+            MainPage = new NavigationPage(mainPage);
+            return;
+        }
 
-		using var scope = serviceProvider.CreateScope();
+        using var scope = serviceProvider.CreateScope();
 
-		ContentPage contentPage = scope.ServiceProvider.GetRequiredService<MainWithAccountPage>();
+        ContentPage contentPage = scope.ServiceProvider.GetRequiredService<MainWithAccountPage>();
 
-		MainPage = new NavigationPage(contentPage);
-	}
+        MainPage = new NavigationPage(contentPage);
+    }
 
-	protected override Window CreateWindow(IActivationState activationState)
-	{
-		Window window = base.CreateWindow(activationState);
+    protected override Window CreateWindow(IActivationState activationState)
+    {
+        Window window = base.CreateWindow(activationState);
 
-		window.Created += async (sender, args) => await _countriesService.GetAsync();
+        window.Created += async (sender, args) => await _countriesService.GetAsync();
 
-		return window;
-	}
+        return window;
+    }
 
 #if WINDOWS
     private static void MapHorizontalOptions(IViewHandler handler, IView view)
     {
-	    if (view is not View mauiView)
-	    {
-		    return;
-	    }
+        if (view is not View mauiView)
+        {
+            return;
+        }
 
-	    if (handler.PlatformView is not Microsoft.UI.Xaml.FrameworkElement element)
-	    {
-		    return;
-	    }
+        if (handler.PlatformView is not Microsoft.UI.Xaml.FrameworkElement element)
+        {
+            return;
+        }
 
-	    element.HorizontalAlignment = mauiView.HorizontalOptions.Alignment switch
-	    {
-		    LayoutAlignment.Start  => Microsoft.UI.Xaml.HorizontalAlignment.Left,
-		    LayoutAlignment.Center => Microsoft.UI.Xaml.HorizontalAlignment.Center,
-		    LayoutAlignment.End    => Microsoft.UI.Xaml.HorizontalAlignment.Right,
-		    LayoutAlignment.Fill   => Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
-		    _ => throw new ArgumentOutOfRangeException()
-	    };
+        element.HorizontalAlignment = mauiView.HorizontalOptions.Alignment switch
+        {
+            LayoutAlignment.Start => Microsoft.UI.Xaml.HorizontalAlignment.Left,
+            LayoutAlignment.Center => Microsoft.UI.Xaml.HorizontalAlignment.Center,
+            LayoutAlignment.End => Microsoft.UI.Xaml.HorizontalAlignment.Right,
+            LayoutAlignment.Fill => Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 
 #endif

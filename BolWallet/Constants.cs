@@ -12,4 +12,5 @@ internal class Constants
     };
 
     public static readonly string UserDataKey = "userdata";
+    public static readonly string AppCodenamesKey = "codenames";
 }
